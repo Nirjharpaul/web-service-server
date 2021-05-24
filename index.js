@@ -32,13 +32,12 @@ client.connect((err) => {
 
   // post function
   app.post("/addService", (req, res) => {
-    serviceCollection
-      .insertOne({
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price,
-        imageUrl: req.body.imageUrl,
-      })
+    serviceCollection.insertOne({
+      title: req.body.title,
+      description: req.body.description,
+      price: req.body.price,
+      imageUrl: req.body.imageUrl,
+    })
       .then((result) => {
         res.send(result);
       });
@@ -47,6 +46,26 @@ client.connect((err) => {
   function getValue() {
     app.get("/getService", (req, res) => {
       serviceCollection.find({}).toArray((err, data) => {
+        res.send(data);
+      });
+    });
+  }
+  // post function for Review
+  app.post("/addReview", (req, res) => {
+    testimonialsCollection.insertOne({
+      name: req.body.name,
+      designation: req.body.designation,
+      description: req.body.description,
+      imageUrl: req.body.imageUrl,
+    })
+      .then((result) => {
+        res.send(result);
+      });
+  });
+  // get function for review
+  function getValue() {
+    app.get("/getReview", (req, res) => {
+      testimonialsCollection.find({}).toArray((err, data) => {
         res.send(data);
       });
     });
@@ -61,7 +80,7 @@ client.connect((err) => {
       });
   });
   // admin order list function
-  app.post("/addOrder", (req, res)=>{
+  app.post("/addOrder", (req, res) => {
     //   const {}
   })
 });
