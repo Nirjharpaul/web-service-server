@@ -30,7 +30,7 @@ client.connect((err) => {
     .db("webService")
     .collection("testimonials");
 
-  // post function
+  // post function for service 
   app.post("/addService", (req, res) => {
     serviceCollection.insertOne({
       title: req.body.title,
@@ -42,14 +42,14 @@ client.connect((err) => {
         res.send(result);
       });
   });
-  // get function
-  function getValue() {
-    app.get("/getService", (req, res) => {
-      serviceCollection.find({}).toArray((err, data) => {
-        res.send(data);
-      });
+  // get function for service
+
+  app.get("/getService", (req, res) => {
+    serviceCollection.find({}).toArray((err, data) => {
+      res.send(data);
     });
-  }
+  });
+
   // post function for Review
   app.post("/addReview", (req, res) => {
     testimonialsCollection.insertOne({
@@ -63,14 +63,20 @@ client.connect((err) => {
       });
   });
   // get function for review
-  function getValue() {
-    app.get("/getReview", (req, res) => {
-      testimonialsCollection.find({}).toArray((err, data) => {
-        res.send(data);
-      });
+
+  app.get("/getReview", (req, res) => {
+    testimonialsCollection.find({}).toArray((err, data) => {
+      res.send(data);
     });
-  }
-  getValue();
+  });
+
+  app.get("/getOrder/:id", (req, res) => {
+    serviceCollection.find({ _id: ObjectId(req.params.id) }).toArray((err, data) => {
+      res.send(data[0]);
+    });
+  });
+
+  // getValue();
   // delete function
   app.delete("/deleteService/:id", (req, res) => {
     serviceCollection
@@ -85,4 +91,5 @@ client.connect((err) => {
   })
 });
 
-app.listen(port, () => console.log(`Sever is running on port ${port}`));
+app.listen(process.env.PORT || port)
+// app.listen(port, () => console.log(`Sever is running on port ${port}`));
