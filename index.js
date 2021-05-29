@@ -26,9 +26,8 @@ const client = new MongoClient(uri, {
 });
 client.connect((err) => {
   const serviceCollection = client.db("webService").collection("services");
-  const testimonialsCollection = client
-    .db("webService")
-    .collection("testimonials");
+  const testimonialsCollection = client.db("webService").collection("testimonials");
+  const orderCollection = client.db("webService").collection("order");
 
   // post function for service 
   app.post("/addService", (req, res) => {
@@ -87,9 +86,30 @@ client.connect((err) => {
   });
   // admin order list function
   app.post("/addOrder", (req, res) => {
-    //   const {}
-  })
+    orderCollection.insertOne({
+      name: req.body.name,
+      email: req.body.email,
+      title: req.body.title,
+      description: req.body.description,
+      imageUrl: req.body.imageUrl,
+      price: req.body.price,
+      button: req.body.button
+
+    })
+      .then((result) => {
+        res.send(result);
+      });
+  });
+
+  app.get("/getSpecificOrder", (req, res) => {
+    orderCollection.find({}).toArray((err, data) => {
+      res.send(data);
+    });
+  });
+
 });
+
+
 
 app.listen(process.env.PORT || port)
 // app.listen(port, () => console.log(`Sever is running on port ${port}`));
