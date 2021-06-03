@@ -107,6 +107,16 @@ client.connect((err) => {
     });
   });
 
+app.put("/statusUpdate/:id", (req, res) => {
+  const {id} = req.params;
+    odrerCollection
+      .updateOne({ _id: ObjectId(id) }, {$set:{button:req.body.button}}, {new:true})
+      .then(() => {
+        getValue();
+      });
+  });
+
+
 });
 
 
